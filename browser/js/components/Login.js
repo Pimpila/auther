@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import {selectUser} from '../redux/selected-user';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -60,13 +61,29 @@ class Login extends React.Component {
   onLoginSubmit(event) {
     const { message } = this.props;
     event.preventDefault();
-    console.log(`${message} isn't implemented yet`);
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const user = {email, password}
+    this.props.selectUser(user);
   }
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
 const mapState = () => ({ message: 'Log in' });
-const mapDispatch = null;
+
+const mapDispatch = {selectUser: selectUser} //if we set mapDispatch to an obj, it assumes you want to wrap dispatch function around it.
+
+//mapDispatch gives you the wrapper dispatch function
+
+// less elegant more undertandable:
+// const mapDispatch = function(dispatch, ownProps) {
+//   return {
+//     selectUser: function(user) {
+//       return dispatch(selectUser(user))
+//     }
+//   }
+// }
+
 
 export default connect(mapState, mapDispatch)(Login);
