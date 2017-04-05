@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
+import { deselectUser} from '../redux/selected-user';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -63,24 +64,36 @@ class Navbar extends React.Component {
         <li>
         <button
           className="navbar-btn btn btn-default"
-          onClick={this.props.logout}>
+          onClick={this.props.deselectUser}>
           logout
         </button>
         </li>
       </ul>
     );
   }
+
+  onLogoutSubmit(event) {
+    event.preventDefault();
+    this.props.deselectUser(this.props.selectedUser);
+  }
+
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapProps = null;
-
-const mapDispatch = dispatch => ({
-  logout: () => {
-    console.log('You signed out. Sorta.');
-    browserHistory.push('/');
+const mapProps = (state) => {
+  return {
+    selectedUser: state.selectedUser
   }
-});
+}
+
+const mapDispatch = { deselectUser };
+
+// const mapDispatch = dispatch => ({
+//   logout: () => {
+//     console.log('You signed out. Sorta.');
+//     browserHistory.push('/');
+//   }
+// });
 
 export default connect(mapProps, mapDispatch)(Navbar);

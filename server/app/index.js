@@ -8,6 +8,7 @@ var User = require('../api/users/user.model');
 // "Enhancing" middleware (does not send response, server-side effects only)
 
 // sessions setup
+// this middleware checks each request for a cookie with session id in header. it tries to find a session in its store that matches. if a session exists it will attach it to the res header and the session id (a hashed version) will go back and forth via cookies at each request, until the session is destroyed. if no session exists it will create a new cookie with session id and send that in res header.
 app.use(session({
   // this mandatory configuration ensures that session IDs are not predictable
   secret: 'secretsarecool', // or whatever you like
@@ -44,6 +45,13 @@ app.post('/login', function(req, res, next) {
     }
   })
   .catch(next)
+})
+
+//logout post request:
+
+app.post('/logout', function(req, res, next) {
+  req.session.destroy()
+  res.sendStatus(200);
 })
 
 // "Responding" middleware (may send a response back to client)
